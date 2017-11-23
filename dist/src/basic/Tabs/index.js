@@ -65,14 +65,10 @@ sceneKeys:this.newSceneKeys({currentPage:this.props.initialPage})};
 },
 
 componentDidMount:function componentDidMount(){var _this=this;
-var scrollFn=function scrollFn(){
-if(_this.scrollView){
-var x=_this.props.initialPage*_this.state.containerWidth;
-_this.scrollView.scrollTo({x:x,animated:false});
-}
-};
 this.setTimeout(function(){
-InteractionManager.runAfterInteractions(scrollFn);
+InteractionManager.runAfterInteractions(function(){
+_this.goToPage(_this.props.initialPage,false);
+});
 },0);
 },
 
@@ -112,7 +108,7 @@ return null;
 }else if(this.props.renderTabBar){
 return React.cloneElement(this.props.renderTabBar(props),props);
 }else{
-return React.createElement(DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:115}}));
+return React.createElement(DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:111}}));
 }
 },
 
@@ -175,7 +171,7 @@ scrollEnabled:!this.props.locked,
 directionalLockEnabled:true,
 alwaysBounceVertical:false,
 keyboardDismissMode:"on-drag"},
-this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:155}}),
+this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:151}}),
 
 scenes));
 
@@ -189,12 +185,12 @@ return(
 React.createElement(SceneComponent,{
 key:child.key,
 shouldUpdated:_this4._shouldRenderSceneKey(idx,_this4.state.currentPage),
-style:{width:_this4.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:189}},
+style:{width:_this4.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:185}},
 
 _this4._keyExists(_this4.state.sceneKeys,key)?
 child:
 
-React.createElement(View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:197}})));
+React.createElement(View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:193}})));
 
 
 
@@ -296,7 +292,7 @@ this.props.tabBarPosition==="overlayTop"?"top":"bottom",0);
 }
 
 return(
-React.createElement(View,{style:[styles.container,this.props.style],onLayout:this._handleLayout,__source:{fileName:_jsxFileName,lineNumber:299}},
+React.createElement(View,{style:[styles.container,this.props.style],onLayout:this._handleLayout,__source:{fileName:_jsxFileName,lineNumber:295}},
 this.props.tabBarPosition==="top"&&this.renderTabBar(tabBarProps),
 this.renderScrollableContent(),
 (this.props.tabBarPosition==="bottom"||overlayTabs)&&this.renderTabBar(tabBarProps)));
