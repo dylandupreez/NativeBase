@@ -64,7 +64,7 @@ const ScrollableTabView = createReactClass({
   },
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(this.goToPage(this.props.initialPage));
+    InteractionManager.runAfterInteractions(() => this.goToPage(this.props.initialPage));
   },
 
   componentWillReceiveProps(props) {
