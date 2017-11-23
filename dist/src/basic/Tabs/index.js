@@ -63,14 +63,9 @@ sceneKeys:this.newSceneKeys({currentPage:this.props.initialPage})};
 
 },
 
-componentDidMount:function componentDidMount(){var _this=this;
-var scrollFn=function scrollFn(){
-if(_this.scrollView){
-var x=_this.props.initialPage*_this.state.containerWidth;
-_this.scrollView.scrollTo({x:x,animated:false});
-}
-};
-_Utils.InteractionManager.runAfterInteractions(scrollFn);
+componentDidMount:function componentDidMount(){
+
+_Utils.InteractionManager.runAfterInteractions(this.goToPage(this.props.initialPage));
 },
 
 componentWillReceiveProps:function componentWillReceiveProps(props){
@@ -109,7 +104,7 @@ return null;
 }else if(this.props.renderTabBar){
 return React.cloneElement(this.props.renderTabBar(props),props);
 }else{
-return React.createElement(DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:112}}));
+return React.createElement(DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:107}}));
 }
 },
 
@@ -122,11 +117,11 @@ children:children});
 this.setState({currentPage:page,sceneKeys:newKeys},callback);
 },
 
-newSceneKeys:function newSceneKeys(_ref2){var _this2=this;var _ref2$previousKeys=_ref2.previousKeys,previousKeys=_ref2$previousKeys===undefined?[]:_ref2$previousKeys,_ref2$currentPage=_ref2.currentPage,currentPage=_ref2$currentPage===undefined?0:_ref2$currentPage,_ref2$children=_ref2.children,children=_ref2$children===undefined?this.props.children:_ref2$children;
+newSceneKeys:function newSceneKeys(_ref2){var _this=this;var _ref2$previousKeys=_ref2.previousKeys,previousKeys=_ref2$previousKeys===undefined?[]:_ref2$previousKeys,_ref2$currentPage=_ref2.currentPage,currentPage=_ref2$currentPage===undefined?0:_ref2$currentPage,_ref2$children=_ref2.children,children=_ref2$children===undefined?this.props.children:_ref2$children;
 var newKeys=[];
 this._children(children).forEach(function(child,idx){
-var key=_this2._makeSceneKey(child,idx);
-if(_this2._keyExists(previousKeys,key)||_this2._shouldRenderSceneKey(idx,currentPage)){
+var key=_this._makeSceneKey(child,idx);
+if(_this._keyExists(previousKeys,key)||_this._shouldRenderSceneKey(idx,currentPage)){
 newKeys.push(key);
 }
 });
@@ -146,7 +141,7 @@ _makeSceneKey:function _makeSceneKey(child,idx){
 return child.props.heading+"_"+idx;
 },
 
-renderScrollableContent:function renderScrollableContent(){var _this3=this;
+renderScrollableContent:function renderScrollableContent(){var _this2=this;
 var scenes=this._composeScenes();
 return(
 React.createElement(ScrollView,_extends({
@@ -157,11 +152,11 @@ contentOffset:{
 x:this.props.initialPage*this.state.containerWidth},
 
 ref:function ref(scrollView){
-_this3.scrollView=scrollView;
+_this2.scrollView=scrollView;
 },
 onScroll:function onScroll(e){
 var offsetX=e.nativeEvent.contentOffset.x;
-_this3._updateScrollValue(offsetX/_this3.state.containerWidth);
+_this2._updateScrollValue(offsetX/_this2.state.containerWidth);
 },
 onMomentumScrollBegin:this._onMomentumScrollBeginAndEnd,
 onMomentumScrollEnd:this._onMomentumScrollBeginAndEnd,
@@ -172,26 +167,26 @@ scrollEnabled:!this.props.locked,
 directionalLockEnabled:true,
 alwaysBounceVertical:false,
 keyboardDismissMode:"on-drag"},
-this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:152}}),
+this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:147}}),
 
 scenes));
 
 
 },
 
-_composeScenes:function _composeScenes(){var _this4=this;
+_composeScenes:function _composeScenes(){var _this3=this;
 return this._children().map(function(child,idx){
-var key=_this4._makeSceneKey(child,idx);
+var key=_this3._makeSceneKey(child,idx);
 return(
 React.createElement(SceneComponent,{
 key:child.key,
-shouldUpdated:_this4._shouldRenderSceneKey(idx,_this4.state.currentPage),
-style:{width:_this4.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:186}},
+shouldUpdated:_this3._shouldRenderSceneKey(idx,_this3.state.currentPage),
+style:{width:_this3.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:181}},
 
-_this4._keyExists(_this4.state.sceneKeys,key)?
+_this3._keyExists(_this3.state.sceneKeys,key)?
 child:
 
-React.createElement(View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:194}})));
+React.createElement(View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:189}})));
 
 
 
@@ -232,13 +227,13 @@ this.state.scrollValue.setValue(value);
 this.props.onScroll(value);
 },
 
-_handleLayout:function _handleLayout(e){var _this5=this;var
+_handleLayout:function _handleLayout(e){var _this4=this;var
 width=e.nativeEvent.layout.width;
 
 if(Math.round(width)!==Math.round(this.state.containerWidth)){
 this.setState({containerWidth:width});
 this.requestAnimationFrame(function(){
-_this5.goToPage(_this5.state.currentPage);
+_this4.goToPage(_this4.state.currentPage);
 });
 }
 },
@@ -293,7 +288,7 @@ this.props.tabBarPosition==="overlayTop"?"top":"bottom",0);
 }
 
 return(
-React.createElement(View,{style:[styles.container,this.props.style],onLayout:this._handleLayout,__source:{fileName:_jsxFileName,lineNumber:296}},
+React.createElement(View,{style:[styles.container,this.props.style],onLayout:this._handleLayout,__source:{fileName:_jsxFileName,lineNumber:291}},
 this.props.tabBarPosition==="top"&&this.renderTabBar(tabBarProps),
 this.renderScrollableContent(),
 (this.props.tabBarPosition==="bottom"||overlayTabs)&&this.renderTabBar(tabBarProps)));
