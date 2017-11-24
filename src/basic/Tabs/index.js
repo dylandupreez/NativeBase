@@ -9,9 +9,12 @@ const {
   Animated,
   ScrollView,
   StyleSheet,
-  Platform,
+  Platform
 } = ReactNative;
-import { InteractionManager, ViewPropTypes } from "../../Utils";
+import {
+  ViewPropTypes,
+  InteractionManager
+} from "../../Utils";
 const TimerMixin = require("react-timer-mixin");
 import _ from "lodash";
 
@@ -64,7 +67,11 @@ const ScrollableTabView = createReactClass({
   },
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(() => this.goToPage(this.props.initialPage));
+    this.setTimeout(() => {
+      InteractionManager.runAfterInteractions(() => {
+        this.goToPage(this.props.initialPage);
+      });
+    }, 0);
   },
 
   componentWillReceiveProps(props) {
