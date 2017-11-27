@@ -1,18 +1,15 @@
-var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};var _jsxFileName="src/basic/Tabs/Button.android.js";var React=require("react");
-var ReactNative=require("react-native");var
-TouchableNativeFeedback=ReactNative.TouchableNativeFeedback,View=ReactNative.View;
+Object.defineProperty(exports,"__esModule",{value:true});exports.Button=undefined;var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};var _jsxFileName="src/basic/Tabs/Button.android.js";var _react=require("react");var _react2=_interopRequireDefault(_react);
+var _reactNative=require("react-native");function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}
 
-var Button=function Button(props){
+var Button=exports.Button=function Button(props){
 return(
-React.createElement(TouchableNativeFeedback,_extends({
+_react2.default.createElement(_reactNative.TouchableNativeFeedback,_extends({
 delayPressIn:0,
-background:TouchableNativeFeedback.SelectableBackground()},
-props,{__source:{fileName:_jsxFileName,lineNumber:7}}),
+background:_reactNative.TouchableNativeFeedback.SelectableBackground()},
+props,{__source:{fileName:_jsxFileName,lineNumber:6}}),
 
 props.children));
 
 
 };
-
-module.exports=Button;
 //# sourceMappingURL=Button.android.js.map

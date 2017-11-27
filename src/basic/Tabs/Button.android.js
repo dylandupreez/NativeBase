@@ -1,8 +1,7 @@
-const React = require("react");
-const ReactNative = require("react-native");
-const { TouchableNativeFeedback, View } = ReactNative;
+import React from "react";
+import { TouchableNativeFeedback, View } from "react-native";
 
-const Button = props => {
+export const Button = props => {
   return (
     <TouchableNativeFeedback
       delayPressIn={0}
@@ -14,5 +13,5 @@ const Button = props => {
   );
 };
 
-module.exports = Button;
+
 //export default Button;
