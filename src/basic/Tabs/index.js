@@ -12,7 +12,7 @@ export default class ScrollableTabView extends Component {
     static propTypes = {
         tabBarPosition: PropTypes.oneOf(["top", "bottom", "overlayTop", "overlayBottom"]),
         initialPage: PropTypes.number,
-        page: PropTypes.number,
+        //page: PropTypes.number,
         onChangeTab: PropTypes.func,
         onScroll: PropTypes.func,
         renderTabBar: PropTypes.any,
@@ -26,7 +26,7 @@ export default class ScrollableTabView extends Component {
     static defaultProps = {
         tabBarPosition: "top",
         initialPage: 0,
-        page: -1,
+        //page: -1,
         onChangeTab: () => { },
         onScroll: () => { },
         contentProps: {},
@@ -42,32 +42,34 @@ export default class ScrollableTabView extends Component {
             scrollValue: new Animated.Value(this.props.initialPage),
             containerWidth: Dimensions.get("window").width,
             sceneKeys: this.newSceneKeys({ currentPage: this.props.initialPage }),
+            initialRender: true,
         }
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            InteractionManager.runAfterInteractions(() => {
-                this.goToPage(this.props.initialPage);
-            });
-        }, 0);
+        InteractionManager.runAfterInteractions(() => {
+            this.goToPage(this.props.initialPage);
+        });
     }
 
-    componentWillReceiveProps(props) {
-        if (props.children !== this.props.children) {
+    componentWillReceiveProps(nextProps) {
+        if (nextProps && nextProps.children !== this.props.children) {
+            console.log("cwrp children not equal", nextProps);
             this.updateSceneKeys({
-                page: this.state.currentPage,
-                children: props.children,
+                page: nextProps.initialPage,
+                children: nextProps.children,
+                callback: () => {
+                    if (nextProps.initialPage >= 0 && nextProps.initialPage !== this.props.initialPage) {
+                        this.setState({ initialRender: true }, () => this.goToPage(nextProps.initialPage));
+                    }
+                }
             });
-        }
-
-        if (props.page >= 0 && props.page !== this.state.currentPage) {
-            this.goToPage(props.page);
         }
     }
 
     goToPage(pageNumber) {
         const offset = pageNumber * this.state.containerWidth;
+        
         if (this.scrollView) {
             this.scrollView.scrollTo({
                 x: offset,
@@ -76,11 +78,12 @@ export default class ScrollableTabView extends Component {
             });
         }
 
-        const currentPage = this.state.currentPage;
-        this.updateSceneKeys({
-            page: pageNumber,
-            callback: this._onChangeTab.bind(this, currentPage, pageNumber),
-        });
+        // const { currentPage } = this.state;
+        // this.updateSceneKeys({
+        //     page: pageNumber,
+        //     callback: this._onChangeTab.bind(this, currentPage, pageNumber),
+        // });
+
     }
 
     updateSceneKeys({ page, children = this.props.children, callback = () => { } }) {
@@ -134,15 +137,37 @@ export default class ScrollableTabView extends Component {
             );
         });
     }
+    _onScroll(e) {
+        const offsetX = e.nativeEvent.contentOffset.x;
+        if (this.state.initialRender) {
+            this.setState({ initialRender: false }, () => {
+                this._updateScrollValue(this.state.currentPage);
+            });
+        } else {
+            this._updateScrollValue(offsetX / this.state.containerWidth);
+        }
+
+
+    }
 
     _updateScrollValue(value) {
         this.state.scrollValue.setValue(value);
-        this.props.onScroll(value);
+        if (this.props.onScroll) {
+            this.props.onScroll(value);
+        }
+
     }
 
-    _onMomentumScrollBeginAndEnd(e) {
-        const offsetX = e.nativeEvent.contentOffset.x;
-        const page = Math.round(offsetX / this.state.containerWidth);
+    _onMomentumScrollEnd(e) {
+        let offsetX = e.nativeEvent.contentOffset.x;
+        if (offsetX < 0) {
+            offsetX = offsetX * -1;
+        }
+        let page = Math.round(offsetX / this.state.containerWidth);
+        console.log("Page from offset calc", page, "Current page in state", this.state.currentPage, "Number of pages", this.props.children.length);
+        if (page >= this.props.children.length) {
+            page = this.props.children.length - 1;
+        }
         if (this.state.currentPage !== page) {
             this._updateSelectedPage(page);
         }
@@ -154,7 +179,8 @@ export default class ScrollableTabView extends Component {
             localNextPage = nextPage.nativeEvent.position;
         }
 
-        const currentPage = this.state.currentPage;
+        const { currentPage } = this.state;
+        console.log("_updateSelectedPage", currentPage, localNextPage);
         this.updateSceneKeys({
             page: localNextPage,
             callback: this._onChangeTab.bind(this, currentPage, localNextPage),
@@ -171,12 +197,13 @@ export default class ScrollableTabView extends Component {
 
     _handleLayout(e) {
         const { width } = e.nativeEvent.layout;
-
         if (Math.round(width) !== Math.round(this.state.containerWidth)) {
-            this.setState({ containerWidth: width });
-            this.requestAnimationFrame(() => {
-                this.goToPage(this.state.currentPage);
+            this.setState({ containerWidth: width }, () => {
+                this.requestAnimationFrame(() => {
+                    this.goToPage(this.state.currentPage);
+                });
             });
+
         }
     }
 
@@ -207,12 +234,9 @@ export default class ScrollableTabView extends Component {
                 ref={scrollView => {
                     this.scrollView = scrollView;
                 }}
-                onScroll={e => {
-                    const offsetX = e.nativeEvent.contentOffset.x;
-                    this._updateScrollValue(offsetX / this.state.containerWidth);
-                }}
-                onMomentumScrollBegin={this._onMomentumScrollBeginAndEnd}
-                onMomentumScrollEnd={this._onMomentumScrollBeginAndEnd}
+                onScroll={e => this._onScroll(e)}
+
+                onMomentumScrollEnd={(e) => this._onMomentumScrollEnd(e)}
                 scrollEventThrottle={16}
                 scrollsToTop={false}
                 showsHorizontalScrollIndicator={false}
@@ -230,8 +254,9 @@ export default class ScrollableTabView extends Component {
     render() {
         let overlayTabs =
             this.props.tabBarPosition === "overlayTop" || this.props.tabBarPosition === "overlayBottom";
+            console.log("Current Page at render", this.state.currentPage);
         let tabBarProps = {
-            goToPage: this.goToPage,
+            goToPage: (pageNumber) => this.goToPage(pageNumber),
             tabs: this._children().map(child => child.props.heading),
             tabStyle: this._children().map(child => child.props.tabStyle),
             activeTabStyle: this._children().map(child => child.props.activeTabStyle),
@@ -273,7 +298,7 @@ export default class ScrollableTabView extends Component {
         }
 
         return (
-            <View style={[styles.container, this.props.style]} onLayout={this._handleLayout}>
+            <View style={[styles.container, this.props.style]} onLayout={(e) => this._handleLayout(e)}>
                 {this.props.tabBarPosition === "top" && this.renderTabBar(tabBarProps)}
                 {this.renderScrollableContent()}
                 {(this.props.tabBarPosition === "bottom" || overlayTabs) && this.renderTabBar(tabBarProps)}
