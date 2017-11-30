@@ -54,7 +54,6 @@ export default class ScrollableTabView extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps && nextProps.children !== this.props.children) {
-            console.log("cwrp children not equal", nextProps);
             this.updateSceneKeys({
                 page: nextProps.initialPage,
                 children: nextProps.children,
@@ -164,7 +163,7 @@ export default class ScrollableTabView extends Component {
             offsetX = offsetX * -1;
         }
         let page = Math.round(offsetX / this.state.containerWidth);
-        console.log("Page from offset calc", page, "Current page in state", this.state.currentPage, "Number of pages", this.props.children.length);
+        
         if (page >= this.props.children.length) {
             page = this.props.children.length - 1;
         }
@@ -180,7 +179,7 @@ export default class ScrollableTabView extends Component {
         }
 
         const { currentPage } = this.state;
-        console.log("_updateSelectedPage", currentPage, localNextPage);
+        
         this.updateSceneKeys({
             page: localNextPage,
             callback: this._onChangeTab.bind(this, currentPage, localNextPage),
@@ -254,7 +253,7 @@ export default class ScrollableTabView extends Component {
     render() {
         let overlayTabs =
             this.props.tabBarPosition === "overlayTop" || this.props.tabBarPosition === "overlayBottom";
-            console.log("Current Page at render", this.state.currentPage);
+            
         let tabBarProps = {
             goToPage: (pageNumber) => this.goToPage(pageNumber),
             tabs: this._children().map(child => child.props.heading),
