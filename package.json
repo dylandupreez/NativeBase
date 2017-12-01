@@ -40,10 +40,12 @@
     "native-base-shoutem-theme": "0.2.1",
     "print-message": "^2.1.0",
     "prop-types": "^15.5.10",
+    "react-mixin": "^2.0.2",
     "react-native-drawer": "https://github.com/GeekyAnts/react-native-drawer",
     "react-native-easy-grid": "0.1.15",
     "react-native-keyboard-aware-scroll-view": "https://github.com/GeekyAnts/react-native-keyboard-aware-scroll-view",
     "react-native-vector-icons": "~4.4.2",
+    "react-timer-mixin": "^0.13.3",
     "react-tween-state": "^0.1.5",
     "tween-functions": "^1.0.1"
   },

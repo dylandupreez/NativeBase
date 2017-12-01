@@ -1,5 +1,7 @@
-Object.defineProperty(exports,"__esModule",{value:true});var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};var _jsxFileName="src\\basic\\Tabs\\index.js";var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();var _react=require("react");var _react2=_interopRequireDefault(_react);
+Object.defineProperty(exports,"__esModule",{value:true});var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};var _jsxFileName="src/basic/Tabs/index.js";var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};}();var _react=require("react");var _react2=_interopRequireDefault(_react);
 var _reactNative=require("react-native");
+var _reactTimerMixin=require("react-timer-mixin");var _reactTimerMixin2=_interopRequireDefault(_reactTimerMixin);
+var _reactMixin=require("react-mixin");var _reactMixin2=_interopRequireDefault(_reactMixin);
 var _propTypes=require("prop-types");var _propTypes2=_interopRequireDefault(_propTypes);
 var _Utils=require("../../Utils");
 var _lodash=require("lodash");var _lodash2=_interopRequireDefault(_lodash);
@@ -126,12 +128,12 @@ return(
 _react2.default.createElement(_SceneComponent2.default,{
 key:child.key,
 shouldUpdated:_this5._shouldRenderSceneKey(idx,_this5.state.currentPage),
-style:{width:_this5.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:126}},
+style:{width:_this5.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:128}},
 
 _this5._keyExists(_this5.state.sceneKeys,key)?
 child:
 
-_react2.default.createElement(_reactNative.View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:134}})));
+_react2.default.createElement(_reactNative.View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:136}})));
 
 
 
@@ -217,7 +219,7 @@ return null;
 }else if(this.props.renderTabBar){
 return _react2.default.cloneElement(this.props.renderTabBar(props),props);
 }else{
-return _react2.default.createElement(_DefaultTabBar.DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:220}}));
+return _react2.default.createElement(_DefaultTabBar.DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:222}}));
 }
 }},{key:"renderScrollableContent",value:function renderScrollableContent()
 
@@ -243,7 +245,7 @@ scrollEnabled:!this.props.locked,
 directionalLockEnabled:true,
 alwaysBounceVertical:false,
 keyboardDismissMode:"on-drag"},
-this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:227}}),
+this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:229}}),
 
 scenes));
 
@@ -297,14 +299,16 @@ this.props.tabBarPosition==="overlayTop"?"top":"bottom",0);
 }
 
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container,this.props.style],onLayout:function onLayout(e){return _this9._handleLayout(e);},__source:{fileName:_jsxFileName,lineNumber:300}},
+_react2.default.createElement(_reactNative.View,{style:[styles.container,this.props.style],onLayout:function onLayout(e){return _this9._handleLayout(e);},__source:{fileName:_jsxFileName,lineNumber:302}},
 this.props.tabBarPosition==="top"&&this.renderTabBar(tabBarProps),
 this.renderScrollableContent(),
 (this.props.tabBarPosition==="bottom"||overlayTabs)&&this.renderTabBar(tabBarProps)));
 
 
-}}]);return ScrollableTabView;}(_react.Component);ScrollableTabView.propTypes={tabBarPosition:_propTypes2.default.oneOf(["top","bottom","overlayTop","overlayBottom"]),initialPage:_propTypes2.default.number,onChangeTab:_propTypes2.default.func,onScroll:_propTypes2.default.func,renderTabBar:_propTypes2.default.any,style:_Utils.ViewPropTypes.style,contentProps:_propTypes2.default.object,scrollWithoutAnimation:_propTypes2.default.bool,locked:_propTypes2.default.bool,prerenderingSiblingsNumber:_propTypes2.default.number};ScrollableTabView.defaultProps={tabBarPosition:"top",initialPage:0,onChangeTab:function onChangeTab(){},onScroll:function onScroll(){},contentProps:{},scrollWithoutAnimation:false,locked:false,prerenderingSiblingsNumber:0};exports.default=ScrollableTabView;
+}}]);return ScrollableTabView;}(_react.Component);ScrollableTabView.propTypes={tabBarPosition:_propTypes2.default.oneOf(["top","bottom","overlayTop","overlayBottom"]),initialPage:_propTypes2.default.number,onChangeTab:_propTypes2.default.func,onScroll:_propTypes2.default.func,renderTabBar:_propTypes2.default.any,style:_Utils.ViewPropTypes.style,contentProps:_propTypes2.default.object,scrollWithoutAnimation:_propTypes2.default.bool,locked:_propTypes2.default.bool,prerenderingSiblingsNumber:_propTypes2.default.number};ScrollableTabView.defaultProps={tabBarPosition:"top",initialPage:0,onChangeTab:function onChangeTab(){},onScroll:function onScroll(){},contentProps:{},scrollWithoutAnimation:false,locked:false,prerenderingSiblingsNumber:0};exports.default=
 
+
+(0,_reactMixin2.default)(ScrollableTabView);
 
 var styles=_reactNative.StyleSheet.create({
 container:{

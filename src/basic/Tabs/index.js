@@ -1,14 +1,16 @@
 import React, { Component } from "react";
 import { Dimensions, View, Animated, ScrollView, StyleSheet, Platform } from "react-native";
+import TimerMixin from "react-timer-mixin";
+import ReactMixin from "react-mixin";
 import PropTypes from "prop-types";
-import { InteractionManager, ViewPropTypes } from "../../Utils"
+import { InteractionManager, ViewPropTypes } from "../../Utils";
 import _ from "lodash";
 
 import SceneComponent from "./SceneComponent";
 import { DefaultTabBar } from "./DefaultTabBar";
 import { ScrollableTabBar } from "./ScrollableTabBar";
 
-export default class ScrollableTabView extends Component {
+ class ScrollableTabView extends Component {
     static propTypes = {
         tabBarPosition: PropTypes.oneOf(["top", "bottom", "overlayTop", "overlayBottom"]),
         initialPage: PropTypes.number,
@@ -305,6 +307,8 @@ export default class ScrollableTabView extends Component {
         );
     }
 }
+
+export default ReactMixin(ScrollableTabView);
 
 const styles = StyleSheet.create({
     container: {
