@@ -308,7 +308,7 @@ this.renderScrollableContent(),
 }}]);return ScrollableTabView;}(_react.Component);ScrollableTabView.propTypes={tabBarPosition:_propTypes2.default.oneOf(["top","bottom","overlayTop","overlayBottom"]),initialPage:_propTypes2.default.number,onChangeTab:_propTypes2.default.func,onScroll:_propTypes2.default.func,renderTabBar:_propTypes2.default.any,style:_Utils.ViewPropTypes.style,contentProps:_propTypes2.default.object,scrollWithoutAnimation:_propTypes2.default.bool,locked:_propTypes2.default.bool,prerenderingSiblingsNumber:_propTypes2.default.number};ScrollableTabView.defaultProps={tabBarPosition:"top",initialPage:0,onChangeTab:function onChangeTab(){},onScroll:function onScroll(){},contentProps:{},scrollWithoutAnimation:false,locked:false,prerenderingSiblingsNumber:0};exports.default=
 
 
-(0,_reactMixin2.default)(ScrollableTabView);
+_reactMixin2.default.onClass(ScrollableTabView,_reactTimerMixin2.default);
 
 var styles=_reactNative.StyleSheet.create({
 container:{

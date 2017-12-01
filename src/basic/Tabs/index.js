@@ -308,7 +308,7 @@ import { ScrollableTabBar } from "./ScrollableTabBar";
     }
 }
 
-export default ReactMixin(ScrollableTabView);
+export default ReactMixin.onClass(ScrollableTabView, TimerMixin);
 
 const styles = StyleSheet.create({
     container: {
