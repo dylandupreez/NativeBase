@@ -38,14 +38,20 @@ class DefaultTabBar extends Component {
 
     renderTab(name, page, isTabActive, onPressHandler, tabStyle, activeTabStyle, textStyle, activeTextStyle, tabHeaderStyle) {
         const headerContent = typeof name !== "string" ? name.props.children : undefined;
-        const { activeTextColor, inactiveTextColor } = this.props;
-        const textColor = isTabActive ? activeTextColor : inactiveTextColor;
-        const fontWeight = isTabActive ? "bold" : "normal";
+        // const { activeTextColor, inactiveTextColor } = this.props;
+        // const textColor = isTabActive ? activeTextColor : inactiveTextColor;
+        //const fontWeight = isTabActive ? "bold" : "normal";
+        let currTextStyle = textStyle, currTabStyle = tabStyle;
+        if(isTabActive){
+            currTextStyle = activeTextStyle;
+            currTabStyle = activeTabStyle;
+        }
+        console.log("renderTab", "name", name, "isTabActive", isTabActive);
         if (typeof name === "string") {
             return (
                 <Button style={{ flex: 1 }} key={name} onPress={() => onPressHandler(page)}>
-                    <TabHeading style={isTabActive ? activeTabStyle : tabStyle} active={isTabActive}>
-                        <Text style={isTabActive ? activeTextStyle : textStyle}>{name}</Text>
+                    <TabHeading style={currTabStyle} active={isTabActive}>
+                        <Text style={currTextStyle}>{name}</Text>
                     </TabHeading>
                 </Button>
             );
@@ -81,9 +87,8 @@ class DefaultTabBar extends Component {
         return (
             <TabContainer style={this.props.tabContainerStyle ? this.props.tabContainerStyle : {}}>
                 {this.props.tabs.map((name, page) => {
-                    
-                    const isTabActive = this.props.activeTab === page;
 
+                    const isTabActive = this.props.activeTab === page;
                     if (!this.props.renderTab) {
                         return this.renderTab(
                             name,
