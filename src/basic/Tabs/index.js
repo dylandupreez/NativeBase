@@ -10,11 +10,11 @@ import SceneComponent from "./SceneComponent";
 import { DefaultTabBar } from "./DefaultTabBar";
 import { ScrollableTabBar } from "./ScrollableTabBar";
 
- class ScrollableTabView extends Component {
+class ScrollableTabView extends Component {
     static propTypes = {
         tabBarPosition: PropTypes.oneOf(["top", "bottom", "overlayTop", "overlayBottom"]),
         initialPage: PropTypes.number,
-        //page: PropTypes.number,
+        page: PropTypes.number,
         onChangeTab: PropTypes.func,
         onScroll: PropTypes.func,
         renderTabBar: PropTypes.any,
@@ -28,7 +28,7 @@ import { ScrollableTabBar } from "./ScrollableTabBar";
     static defaultProps = {
         tabBarPosition: "top",
         initialPage: 0,
-        //page: -1,
+        page: -1,
         onChangeTab: () => { },
         onScroll: () => { },
         contentProps: {},
@@ -49,22 +49,25 @@ import { ScrollableTabBar } from "./ScrollableTabBar";
     }
 
     componentDidMount() {
-        InteractionManager.runAfterInteractions(() => {
-            this.goToPage(this.props.initialPage);
-        });
+        const scrollFn = () => {
+            if (this.scrollView) {
+                const x = this.props.initialPage * this.state.containerWidth;
+                this.scrollView.scrollTo({ x, animated: false });
+            }
+        };
+        InteractionManager.runAfterInteractions(scrollFn);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps && nextProps.children !== this.props.children) {
+        if (nextProps.children !== this.props.children) {
             this.updateSceneKeys({
                 page: this.state.currentPage,
                 children: nextProps.children,
-                callback: () => {
-                    if (nextProps.initialPage >= 0 && nextProps.initialPage !== this.props.initialPage) {
-                        this.setState({ initialRender: true }, () => this.goToPage(nextProps.initialPage));
-                    }
-                }
             });
+        }
+
+        if (nextProps.page >= 0 && nextProps.page !== this.state.currentPage) {
+            this.goToPage(nextProps.page);
         }
     }
 
@@ -78,13 +81,13 @@ import { ScrollableTabBar } from "./ScrollableTabBar";
                 animated: !this.props.scrollWithoutAnimation,
             });
         }
-        if (Platform.OS === "android") {
-            const { currentPage } = this.state;
-            this.updateSceneKeys({
-                page: pageNumber,
-                callback: this._onChangeTab.bind(this, currentPage, pageNumber),
-            });
-        }
+
+        const { currentPage } = this.state;
+        this.updateSceneKeys({
+            page: pageNumber,
+            callback: this._onChangeTab.bind(this, currentPage, pageNumber),
+        });
+
 
     }
 

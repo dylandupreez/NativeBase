@@ -49,22 +49,25 @@ initialRender:true};return _this;
 }_createClass(ScrollableTabView,[{key:"componentDidMount",value:function componentDidMount()
 
 {var _this2=this;
-_Utils.InteractionManager.runAfterInteractions(function(){
-_this2.goToPage(_this2.props.initialPage);
-});
+var scrollFn=function scrollFn(){
+if(_this2.scrollView){
+var x=_this2.props.initialPage*_this2.state.containerWidth;
+_this2.scrollView.scrollTo({x:x,animated:false});
+}
+};
+_Utils.InteractionManager.runAfterInteractions(scrollFn);
 }},{key:"componentWillReceiveProps",value:function componentWillReceiveProps(
 
-nextProps){var _this3=this;
-if(nextProps&&nextProps.children!==this.props.children){
+nextProps){
+if(nextProps.children!==this.props.children){
 this.updateSceneKeys({
 page:this.state.currentPage,
-children:nextProps.children,
-callback:function callback(){
-if(nextProps.initialPage>=0&&nextProps.initialPage!==_this3.props.initialPage){
-_this3.setState({initialRender:true},function(){return _this3.goToPage(nextProps.initialPage);});
-}
-}});
+children:nextProps.children});
 
+}
+
+if(nextProps.page>=0&&nextProps.page!==this.state.currentPage){
+this.goToPage(nextProps.page);
 }
 }},{key:"goToPage",value:function goToPage(
 
@@ -77,14 +80,14 @@ x:offset,
 y:0,
 animated:!this.props.scrollWithoutAnimation});
 
-}
-if(_reactNative.Platform.OS==="android"){var
+}var
+
 currentPage=this.state.currentPage;
 this.updateSceneKeys({
 page:pageNumber,
 callback:this._onChangeTab.bind(this,currentPage,pageNumber)});
 
-}
+
 
 }},{key:"updateSceneKeys",value:function updateSceneKeys(_ref)
 
@@ -97,11 +100,11 @@ children:children});
 this.setState({currentPage:page,sceneKeys:newKeys},callback);
 }},{key:"newSceneKeys",value:function newSceneKeys(_ref2)
 
-{var _this4=this;var _ref2$previousKeys=_ref2.previousKeys,previousKeys=_ref2$previousKeys===undefined?[]:_ref2$previousKeys,_ref2$currentPage=_ref2.currentPage,currentPage=_ref2$currentPage===undefined?0:_ref2$currentPage,_ref2$children=_ref2.children,children=_ref2$children===undefined?this.props.children:_ref2$children;
+{var _this3=this;var _ref2$previousKeys=_ref2.previousKeys,previousKeys=_ref2$previousKeys===undefined?[]:_ref2$previousKeys,_ref2$currentPage=_ref2.currentPage,currentPage=_ref2$currentPage===undefined?0:_ref2$currentPage,_ref2$children=_ref2.children,children=_ref2$children===undefined?this.props.children:_ref2$children;
 var newKeys=[];
 this._children(children).forEach(function(child,idx){
-var key=_this4._makeSceneKey(child,idx);
-if(_this4._keyExists(previousKeys,key)||_this4._shouldRenderSceneKey(idx,currentPage)){
+var key=_this3._makeSceneKey(child,idx);
+if(_this3._keyExists(previousKeys,key)||_this3._shouldRenderSceneKey(idx,currentPage)){
 newKeys.push(key);
 }
 });
@@ -121,29 +124,29 @@ child,idx){
 return child.props.heading+"_"+idx;
 }},{key:"_composeScenes",value:function _composeScenes()
 
-{var _this5=this;
+{var _this4=this;
 return this._children().map(function(child,idx){
-var key=_this5._makeSceneKey(child,idx);
+var key=_this4._makeSceneKey(child,idx);
 return(
 _react2.default.createElement(_SceneComponent2.default,{
 key:child.key,
-shouldUpdated:_this5._shouldRenderSceneKey(idx,_this5.state.currentPage),
-style:{width:_this5.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:128}},
+shouldUpdated:_this4._shouldRenderSceneKey(idx,_this4.state.currentPage),
+style:{width:_this4.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:131}},
 
-_this5._keyExists(_this5.state.sceneKeys,key)?
+_this4._keyExists(_this4.state.sceneKeys,key)?
 child:
 
-_react2.default.createElement(_reactNative.View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:136}})));
+_react2.default.createElement(_reactNative.View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:139}})));
 
 
 
 });
 }},{key:"_onScroll",value:function _onScroll(
-e){var _this6=this;
+e){var _this5=this;
 var offsetX=e.nativeEvent.contentOffset.x;
 if(this.state.initialRender&&_reactNative.Platform.OS==="ios"){
 this.setState({initialRender:false},function(){
-_this6._updateScrollValue(_this6.state.currentPage);
+_this5._updateScrollValue(_this5.state.currentPage);
 });
 }else{
 this._updateScrollValue(offsetX/this.state.containerWidth);
@@ -197,12 +200,12 @@ from:prevPage});
 
 }},{key:"_handleLayout",value:function _handleLayout(
 
-e){var _this7=this;var
+e){var _this6=this;var
 width=e.nativeEvent.layout.width;
 if(Math.round(width)!==Math.round(this.state.containerWidth)){
 this.setState({containerWidth:width},function(){
-_this7.requestAnimationFrame(function(){
-_this7.goToPage(_this7.state.currentPage);
+_this6.requestAnimationFrame(function(){
+_this6.goToPage(_this6.state.currentPage);
 });
 });
 
@@ -219,11 +222,11 @@ return null;
 }else if(this.props.renderTabBar){
 return _react2.default.cloneElement(this.props.renderTabBar(props),props);
 }else{
-return _react2.default.createElement(_DefaultTabBar.DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:222}}));
+return _react2.default.createElement(_DefaultTabBar.DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:225}}));
 }
 }},{key:"renderScrollableContent",value:function renderScrollableContent()
 
-{var _this8=this;
+{var _this7=this;
 var scenes=this._composeScenes();
 return(
 _react2.default.createElement(_reactNative.ScrollView,_extends({
@@ -234,10 +237,10 @@ contentOffset:{
 x:this.props.initialPage*this.state.containerWidth},
 
 ref:function ref(scrollView){
-_this8.scrollView=scrollView;
+_this7.scrollView=scrollView;
 },
-onScroll:function onScroll(e){return _this8._onScroll(e);},
-onMomentumScrollEnd:function onMomentumScrollEnd(e){return _this8._onMomentumScrollEnd(e);},
+onScroll:function onScroll(e){return _this7._onScroll(e);},
+onMomentumScrollEnd:function onMomentumScrollEnd(e){return _this7._onMomentumScrollEnd(e);},
 scrollEventThrottle:16,
 scrollsToTop:false,
 showsHorizontalScrollIndicator:false,
@@ -245,19 +248,19 @@ scrollEnabled:!this.props.locked,
 directionalLockEnabled:true,
 alwaysBounceVertical:false,
 keyboardDismissMode:"on-drag"},
-this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:229}}),
+this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:232}}),
 
 scenes));
 
 
 }},{key:"render",value:function render()
 
-{var _this9=this;
+{var _this8=this;
 var overlayTabs=
 this.props.tabBarPosition==="overlayTop"||this.props.tabBarPosition==="overlayBottom";
 
 var tabBarProps={
-goToPage:function goToPage(pageNumber){return _this9.goToPage(pageNumber);},
+goToPage:function goToPage(pageNumber){return _this8.goToPage(pageNumber);},
 tabs:this._children().map(function(child){return child.props.heading;}),
 tabStyle:this._children().map(function(child){return child.props.tabStyle;}),
 activeTabStyle:this._children().map(function(child){return child.props.activeTabStyle;}),
@@ -299,13 +302,13 @@ this.props.tabBarPosition==="overlayTop"?"top":"bottom",0);
 }
 
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container,this.props.style],onLayout:function onLayout(e){return _this9._handleLayout(e);},__source:{fileName:_jsxFileName,lineNumber:302}},
+_react2.default.createElement(_reactNative.View,{style:[styles.container,this.props.style],onLayout:function onLayout(e){return _this8._handleLayout(e);},__source:{fileName:_jsxFileName,lineNumber:305}},
 this.props.tabBarPosition==="top"&&this.renderTabBar(tabBarProps),
 this.renderScrollableContent(),
 (this.props.tabBarPosition==="bottom"||overlayTabs)&&this.renderTabBar(tabBarProps)));
 
 
-}}]);return ScrollableTabView;}(_react.Component);ScrollableTabView.propTypes={tabBarPosition:_propTypes2.default.oneOf(["top","bottom","overlayTop","overlayBottom"]),initialPage:_propTypes2.default.number,onChangeTab:_propTypes2.default.func,onScroll:_propTypes2.default.func,renderTabBar:_propTypes2.default.any,style:_Utils.ViewPropTypes.style,contentProps:_propTypes2.default.object,scrollWithoutAnimation:_propTypes2.default.bool,locked:_propTypes2.default.bool,prerenderingSiblingsNumber:_propTypes2.default.number};ScrollableTabView.defaultProps={tabBarPosition:"top",initialPage:0,onChangeTab:function onChangeTab(){},onScroll:function onScroll(){},contentProps:{},scrollWithoutAnimation:false,locked:false,prerenderingSiblingsNumber:0};exports.default=
+}}]);return ScrollableTabView;}(_react.Component);ScrollableTabView.propTypes={tabBarPosition:_propTypes2.default.oneOf(["top","bottom","overlayTop","overlayBottom"]),initialPage:_propTypes2.default.number,page:_propTypes2.default.number,onChangeTab:_propTypes2.default.func,onScroll:_propTypes2.default.func,renderTabBar:_propTypes2.default.any,style:_Utils.ViewPropTypes.style,contentProps:_propTypes2.default.object,scrollWithoutAnimation:_propTypes2.default.bool,locked:_propTypes2.default.bool,prerenderingSiblingsNumber:_propTypes2.default.number};ScrollableTabView.defaultProps={tabBarPosition:"top",initialPage:0,page:-1,onChangeTab:function onChangeTab(){},onScroll:function onScroll(){},contentProps:{},scrollWithoutAnimation:false,locked:false,prerenderingSiblingsNumber:0};exports.default=
 
 
 _reactMixin2.default.onClass(ScrollableTabView,_reactTimerMixin2.default);
