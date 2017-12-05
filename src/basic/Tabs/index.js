@@ -37,6 +37,8 @@ class ScrollableTabView extends Component {
         prerenderingSiblingsNumber: 0,
     };
 
+    initialRender = true;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -44,7 +46,7 @@ class ScrollableTabView extends Component {
             scrollValue: new Animated.Value(this.props.initialPage),
             containerWidth: Dimensions.get("window").width,
             sceneKeys: this.newSceneKeys({ currentPage: this.props.initialPage }),
-            initialRender: true,
+
         }
     }
 
@@ -59,6 +61,9 @@ class ScrollableTabView extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        if(this.initialRender){
+            this.initialRender = false;
+        }
         if (nextProps.children !== this.props.children) {
             this.updateSceneKeys({
                 page: this.state.currentPage,
@@ -66,18 +71,18 @@ class ScrollableTabView extends Component {
             });
         }
         if (nextProps.page >= 0 && nextProps.page !== this.state.currentPage) {
-            this.goToPage(nextProps.page, false);
+            this.goToPage(nextProps.page);
         }
     }
 
-    goToPage(pageNumber, animated = !this.props.scrollWithoutAnimation) {
+    goToPage(pageNumber) {
         const offset = pageNumber * this.state.containerWidth;
 
         if (this.scrollView) {
             this.scrollView.scrollTo({
                 x: offset,
                 y: 0,
-                animated,
+                animated: !this.props.scrollWithoutAnimation,
             });
         }
 
@@ -142,8 +147,10 @@ class ScrollableTabView extends Component {
         });
     }
     _onScroll(e) {
-        const offsetX = e.nativeEvent.contentOffset.x;
-        this._updateScrollValue(offsetX / this.state.containerWidth);
+        if (!this.initialRender) {
+            const offsetX = e.nativeEvent.contentOffset.x;
+            this._updateScrollValue(offsetX / this.state.containerWidth);
+        }
     }
 
     _updateScrollValue(value) {
@@ -151,15 +158,16 @@ class ScrollableTabView extends Component {
         if (this.props.onScroll) {
             this.props.onScroll(value);
         }
-
     }
 
     _onMomentumScrollBeginAndEnd(e) {
         const offsetX = e.nativeEvent.contentOffset.x;
         const page = Math.round(offsetX / this.state.containerWidth);
-        //console.log("_onMomentumScrollBeginAndEnd", "offset", e.nativeEvent.contentOffset.x, "currentPage", this.state.currentPage, "calculated", page);
         if (this.state.currentPage !== page) {
             this._updateSelectedPage(page);
+        }
+        if (this.initialRender) {
+            this.initialRender = false;
         }
     }
 
@@ -189,7 +197,7 @@ class ScrollableTabView extends Component {
         if (Math.round(width) !== Math.round(this.state.containerWidth)) {
             this.setState({ containerWidth: width }, () => {
                 this.requestAnimationFrame(() => {
-                    this.goToPage(this.state.currentPage, false);
+                    this.goToPage(this.state.currentPage);
                 });
             });
 

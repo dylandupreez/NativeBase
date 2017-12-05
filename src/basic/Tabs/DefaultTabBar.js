@@ -46,7 +46,6 @@ class DefaultTabBar extends Component {
             currTextStyle = activeTextStyle;
             currTabStyle = activeTabStyle;
         }
-        console.log("renderTab", "name", name, "isTabActive", isTabActive);
         if (typeof name === "string") {
             return (
                 <Button style={{ flex: 1 }} key={name} onPress={() => onPressHandler(page)}>
