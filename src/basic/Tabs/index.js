@@ -37,7 +37,7 @@ class ScrollableTabView extends Component {
         prerenderingSiblingsNumber: 0,
     };
 
-    initialRender = true;
+    initialRender = Platform.OS === "ios";
 
     constructor(props) {
         super(props);
@@ -46,22 +46,31 @@ class ScrollableTabView extends Component {
             scrollValue: new Animated.Value(this.props.initialPage),
             containerWidth: Dimensions.get("window").width,
             sceneKeys: this.newSceneKeys({ currentPage: this.props.initialPage }),
-
         }
     }
 
     componentDidMount() {
-        const scrollFn = () => {
-            if (this.scrollView) {
-                const x = this.props.initialPage * this.state.containerWidth;
-                this.scrollView.scrollTo({ x, animated: false });
-            }
-        };
-        InteractionManager.runAfterInteractions(scrollFn);
+        console.log("cdm");
+        if (Platform.OS === "ios") {
+            const scrollFn = () => {
+                if (this.scrollView) {
+                    const x = this.props.initialPage * this.state.containerWidth;
+                    console.log(x);
+                    this.scrollView.scrollTo({ x, animated: true });
+                    this.scrollView.forceUpdate();
+
+                }
+            };
+            InteractionManager.runAfterInteractions(scrollFn);
+        }else{
+            this.goToPage(0);
+            this.setTimeout(() => this.goToPage(this.props.initialPage),0);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.initialRender){
+        console.log("cwrp", nextProps.page, nextProps.initialPage);
+        if (this.initialRender) {
             this.initialRender = false;
         }
         if (nextProps.children !== this.props.children) {
@@ -147,6 +156,9 @@ class ScrollableTabView extends Component {
         });
     }
     _onScroll(e) {
+
+        console.log("_onScroll", e.nativeEvent.contentOffset.x);
+
         if (!this.initialRender) {
             const offsetX = e.nativeEvent.contentOffset.x;
             this._updateScrollValue(offsetX / this.state.containerWidth);
@@ -161,6 +173,7 @@ class ScrollableTabView extends Component {
     }
 
     _onMomentumScrollBeginAndEnd(e) {
+        console.log("_onMomentumScrollBeginAndEnd");
         const offsetX = e.nativeEvent.contentOffset.x;
         const page = Math.round(offsetX / this.state.containerWidth);
         if (this.state.currentPage !== page) {
@@ -225,9 +238,9 @@ class ScrollableTabView extends Component {
                 horizontal
                 pagingEnabled
                 automaticallyAdjustContentInsets={false}
-                contentOffset={{
-                    x: this.props.initialPage * this.state.containerWidth,
-                }}
+                // contentOffset={{
+                //     x: this.props.initialPage * this.state.containerWidth
+                // }}
                 ref={scrollView => {
                     this.scrollView = scrollView;
                 }}
