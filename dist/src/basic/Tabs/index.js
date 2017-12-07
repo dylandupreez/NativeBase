@@ -40,27 +40,36 @@ ScrollableTabView=function(_Component){_inherits(ScrollableTabView,_Component);
 
 
 function ScrollableTabView(props){_classCallCheck(this,ScrollableTabView);var _this=_possibleConstructorReturn(this,(ScrollableTabView.__proto__||Object.getPrototypeOf(ScrollableTabView)).call(this,
-props));_this.initialRender=true;
+props));_this.initialRender=_reactNative.Platform.OS==="ios";
 _this.state={
 currentPage:_this.props.initialPage,
 scrollValue:new _reactNative.Animated.Value(_this.props.initialPage),
 containerWidth:_reactNative.Dimensions.get("window").width,
 sceneKeys:_this.newSceneKeys({currentPage:_this.props.initialPage})};return _this;
 
-
 }_createClass(ScrollableTabView,[{key:"componentDidMount",value:function componentDidMount()
 
 {var _this2=this;
+console.log("cdm");
+if(_reactNative.Platform.OS==="ios"){
 var scrollFn=function scrollFn(){
 if(_this2.scrollView){
 var x=_this2.props.initialPage*_this2.state.containerWidth;
-_this2.scrollView.scrollTo({x:x,animated:false});
+console.log(x);
+_this2.scrollView.scrollTo({x:x,animated:true});
+_this2.scrollView.forceUpdate();
+
 }
 };
 _Utils.InteractionManager.runAfterInteractions(scrollFn);
+}else{
+this.goToPage(0);
+this.setTimeout(function(){return _this2.goToPage(_this2.props.initialPage);},0);
+}
 }},{key:"componentWillReceiveProps",value:function componentWillReceiveProps(
 
 nextProps){
+console.log("cwrp",nextProps.page,nextProps.initialPage);
 if(this.initialRender){
 this.initialRender=false;
 }
@@ -135,18 +144,21 @@ return(
 _react2.default.createElement(_SceneComponent2.default,{
 key:child.key,
 shouldUpdated:_this4._shouldRenderSceneKey(idx,_this4.state.currentPage),
-style:{width:_this4.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:135}},
+style:{width:_this4.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:144}},
 
 _this4._keyExists(_this4.state.sceneKeys,key)?
 child:
 
-_react2.default.createElement(_reactNative.View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:143}})));
+_react2.default.createElement(_reactNative.View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:152}})));
 
 
 
 });
 }},{key:"_onScroll",value:function _onScroll(
 e){
+
+console.log("_onScroll",e.nativeEvent.contentOffset.x);
+
 if(!this.initialRender){
 var offsetX=e.nativeEvent.contentOffset.x;
 this._updateScrollValue(offsetX/this.state.containerWidth);
@@ -161,6 +173,7 @@ this.props.onScroll(value);
 }},{key:"_onMomentumScrollBeginAndEnd",value:function _onMomentumScrollBeginAndEnd(
 
 e){
+console.log("_onMomentumScrollBeginAndEnd");
 var offsetX=e.nativeEvent.contentOffset.x;
 var page=Math.round(offsetX/this.state.containerWidth);
 if(this.state.currentPage!==page){
@@ -214,7 +227,7 @@ return null;
 }else if(this.props.renderTabBar){
 return _react2.default.cloneElement(this.props.renderTabBar(props),props);
 }else{
-return _react2.default.createElement(_DefaultTabBar.DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:217}}));
+return _react2.default.createElement(_DefaultTabBar.DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:230}}));
 }
 }},{key:"renderScrollableContent",value:function renderScrollableContent()
 
@@ -225,8 +238,8 @@ _react2.default.createElement(_reactNative.ScrollView,_extends({
 horizontal:true,
 pagingEnabled:true,
 automaticallyAdjustContentInsets:false,
-contentOffset:{
-x:this.props.initialPage*this.state.containerWidth},
+
+
 
 ref:function ref(scrollView){
 _this6.scrollView=scrollView;
@@ -241,7 +254,7 @@ scrollEnabled:!this.props.locked,
 directionalLockEnabled:true,
 alwaysBounceVertical:false,
 keyboardDismissMode:"on-drag"},
-this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:224}}),
+this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:237}}),
 
 scenes));
 
@@ -295,7 +308,7 @@ this.props.tabBarPosition==="overlayTop"?"top":"bottom",0);
 }
 
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container,this.props.style],onLayout:function onLayout(e){return _this7._handleLayout(e);},__source:{fileName:_jsxFileName,lineNumber:298}},
+_react2.default.createElement(_reactNative.View,{style:[styles.container,this.props.style],onLayout:function onLayout(e){return _this7._handleLayout(e);},__source:{fileName:_jsxFileName,lineNumber:311}},
 this.props.tabBarPosition==="top"&&this.renderTabBar(tabBarProps),
 this.renderScrollableContent(),
 (this.props.tabBarPosition==="bottom"||overlayTabs)&&this.renderTabBar(tabBarProps)));
