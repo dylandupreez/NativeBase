@@ -50,26 +50,12 @@ class ScrollableTabView extends Component {
     }
 
     componentDidMount() {
-        console.log("cdm");
-        if (Platform.OS === "ios") {
-            const scrollFn = () => {
-                if (this.scrollView) {
-                    const x = this.props.initialPage * this.state.containerWidth;
-                    console.log(x);
-                    this.scrollView.scrollTo({ x, animated: true });
-                    this.scrollView.forceUpdate();
-
-                }
-            };
-            InteractionManager.runAfterInteractions(scrollFn);
-        }else{
-            this.goToPage(0);
-            this.setTimeout(() => this.goToPage(this.props.initialPage),0);
-        }
+        this.goToPage(0);
+        this.setTimeout(() => this.goToPage(this.props.initialPage), 0);
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("cwrp", nextProps.page, nextProps.initialPage);
+
         if (this.initialRender) {
             this.initialRender = false;
         }
