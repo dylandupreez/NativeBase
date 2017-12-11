@@ -22,7 +22,10 @@ class ListItem extends Component {
 			return (
 				<TouchableHighlight
 					onPress={this.props.onPress}
+					onPressIn={this.props.onPressIn}
+					onPressOut={this.props.onPressOut}
 					onLongPress={this.props.onLongPress}
+					delayPressIn={0}
 					ref={c => (this._root = c)}
 					underlayColor={variables.listBtnUnderlayColor}
 				>

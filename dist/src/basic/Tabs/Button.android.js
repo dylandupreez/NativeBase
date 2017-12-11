@@ -3,9 +3,7 @@ var _reactNative=require("react-native");function _interopRequireDefault(obj){re
 
 var Button=exports.Button=function Button(props){
 return(
-_react2.default.createElement(_reactNative.TouchableNativeFeedback,_extends({
-delayPressIn:0,
-background:_reactNative.TouchableNativeFeedback.SelectableBackground()},
+_react2.default.createElement(_reactNative.TouchableWithoutFeedback,_extends({},
 props,{__source:{fileName:_jsxFileName,lineNumber:6}}),
 
 props.children));

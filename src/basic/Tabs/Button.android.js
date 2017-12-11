@@ -1,15 +1,13 @@
 import React from "react";
-import { TouchableNativeFeedback, View } from "react-native";
+import { TouchableWithoutFeedback, View } from "react-native";
 
 export const Button = props => {
   return (
-    <TouchableNativeFeedback
-      delayPressIn={0}
-      background={TouchableNativeFeedback.SelectableBackground()} // eslint-disable-line new-cap
+    <TouchableWithoutFeedback
       {...props}
     >
       {props.children}
-    </TouchableNativeFeedback>
+    </TouchableWithoutFeedback>
   );
 };
 
