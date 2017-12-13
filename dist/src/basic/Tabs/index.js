@@ -50,8 +50,10 @@ sceneKeys:_this.newSceneKeys({currentPage:_this.props.initialPage})};return _thi
 }_createClass(ScrollableTabView,[{key:"componentDidMount",value:function componentDidMount()
 
 {var _this2=this;
+if(_reactNative.Platform.OS==="android"){
 this.goToPage(0);
 this.setTimeout(function(){return _this2.goToPage(_this2.props.initialPage);},0);
+}
 }},{key:"componentWillReceiveProps",value:function componentWillReceiveProps(
 
 nextProps){
@@ -130,20 +132,18 @@ return(
 _react2.default.createElement(_SceneComponent2.default,{
 key:child.key,
 shouldUpdated:_this4._shouldRenderSceneKey(idx,_this4.state.currentPage),
-style:{width:_this4.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:130}},
+style:{width:_this4.state.containerWidth},__source:{fileName:_jsxFileName,lineNumber:132}},
 
 _this4._keyExists(_this4.state.sceneKeys,key)?
 child:
 
-_react2.default.createElement(_reactNative.View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:138}})));
+_react2.default.createElement(_reactNative.View,{heading:child.props.heading,__source:{fileName:_jsxFileName,lineNumber:140}})));
 
 
 
 });
 }},{key:"_onScroll",value:function _onScroll(
 e){
-
-console.log("_onScroll",e.nativeEvent.contentOffset.x);
 
 if(!this.initialRender){
 var offsetX=e.nativeEvent.contentOffset.x;
@@ -159,7 +159,6 @@ this.props.onScroll(value);
 }},{key:"_onMomentumScrollBeginAndEnd",value:function _onMomentumScrollBeginAndEnd(
 
 e){
-console.log("_onMomentumScrollBeginAndEnd");
 var offsetX=e.nativeEvent.contentOffset.x;
 var page=Math.round(offsetX/this.state.containerWidth);
 if(this.state.currentPage!==page){
@@ -213,7 +212,7 @@ return null;
 }else if(this.props.renderTabBar){
 return _react2.default.cloneElement(this.props.renderTabBar(props),props);
 }else{
-return _react2.default.createElement(_DefaultTabBar.DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:216}}));
+return _react2.default.createElement(_DefaultTabBar.DefaultTabBar,_extends({},props,{__source:{fileName:_jsxFileName,lineNumber:215}}));
 }
 }},{key:"renderScrollableContent",value:function renderScrollableContent()
 
@@ -224,8 +223,8 @@ _react2.default.createElement(_reactNative.ScrollView,_extends({
 horizontal:true,
 pagingEnabled:true,
 automaticallyAdjustContentInsets:false,
-
-
+contentOffset:{
+x:this.props.initialPage*this.state.containerWidth},
 
 ref:function ref(scrollView){
 _this6.scrollView=scrollView;
@@ -240,7 +239,7 @@ scrollEnabled:!this.props.locked,
 directionalLockEnabled:true,
 alwaysBounceVertical:false,
 keyboardDismissMode:"on-drag"},
-this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:223}}),
+this.props.contentProps,{__source:{fileName:_jsxFileName,lineNumber:222}}),
 
 scenes));
 
@@ -294,7 +293,7 @@ this.props.tabBarPosition==="overlayTop"?"top":"bottom",0);
 }
 
 return(
-_react2.default.createElement(_reactNative.View,{style:[styles.container,this.props.style],onLayout:function onLayout(e){return _this7._handleLayout(e);},__source:{fileName:_jsxFileName,lineNumber:297}},
+_react2.default.createElement(_reactNative.View,{style:[styles.container,this.props.style],onLayout:function onLayout(e){return _this7._handleLayout(e);},__source:{fileName:_jsxFileName,lineNumber:296}},
 this.props.tabBarPosition==="top"&&this.renderTabBar(tabBarProps),
 this.renderScrollableContent(),
 (this.props.tabBarPosition==="bottom"||overlayTabs)&&this.renderTabBar(tabBarProps)));
