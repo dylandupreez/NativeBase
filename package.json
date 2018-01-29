@@ -40,12 +40,7 @@
     "native-base-shoutem-theme": "0.2.2",
     "print-message": "^2.1.0",
     "prop-types": "^15.5.10",
-<<<<<<< HEAD
-    "react-mixin": "^2.0.2",
-    "react-native-drawer": "https://github.com/GeekyAnts/react-native-drawer",
-=======
     "react-native-drawer": "2.5.0",
->>>>>>> ed4cc170b4b458b207825eadc9b8afa744b87130
     "react-native-easy-grid": "0.1.15",
     "react-native-keyboard-aware-scroll-view": "0.4.2",
     "react-native-vector-icons": "~4.4.2",
