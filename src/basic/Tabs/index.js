@@ -3,7 +3,22 @@ import { Dimensions, View, Animated, ScrollView, StyleSheet, Platform } from "re
 import TimerMixin from "react-timer-mixin";
 import ReactMixin from "react-mixin";
 import PropTypes from "prop-types";
+<<<<<<< HEAD
 import { InteractionManager, ViewPropTypes } from "../../Utils";
+=======
+import createReactClass from "create-react-class";
+const ReactNative = require("react-native");
+const {
+  Dimensions,
+  View,
+  Animated,
+  ScrollView,
+  StyleSheet,
+  Platform,
+} = ReactNative;
+import { InteractionManager, ViewPropTypes } from "../../Utils";
+const TimerMixin = require("react-timer-mixin");
+>>>>>>> ed4cc170b4b458b207825eadc9b8afa744b87130
 import _ from "lodash";
 
 import SceneComponent from "./SceneComponent";
@@ -24,6 +39,7 @@ class ScrollableTabView extends Component {
         locked: PropTypes.bool,
         prerenderingSiblingsNumber: PropTypes.number,
     };
+<<<<<<< HEAD
 
     static defaultProps = {
         tabBarPosition: "top",
@@ -47,6 +63,25 @@ class ScrollableTabView extends Component {
             containerWidth: Dimensions.get("window").width,
             sceneKeys: this.newSceneKeys({ currentPage: this.props.initialPage }),
         }
+=======
+  },
+
+  componentDidMount() {
+    const scrollFn = () => {
+      if (this.scrollView) {
+        this.state.scrollValue.setValue(this.props.initialPage);
+      }
+    };
+    InteractionManager.runAfterInteractions(scrollFn);
+  },
+
+  componentWillReceiveProps(props) {
+    if (props.children !== this.props.children) {
+      this.updateSceneKeys({
+        page: this.state.currentPage,
+        children: props.children,
+      });
+>>>>>>> ed4cc170b4b458b207825eadc9b8afa744b87130
     }
 
     componentDidMount() {
@@ -168,6 +203,7 @@ class ScrollableTabView extends Component {
             this.initialRender = false;
         }
     }
+<<<<<<< HEAD
 
     _updateSelectedPage(nextPage) {
         let localNextPage = nextPage;
@@ -301,6 +337,27 @@ class ScrollableTabView extends Component {
         );
     }
 }
+=======
+    if (overlayTabs) {
+      tabBarProps.style = {
+        position: "absolute",
+        left: 0,
+        right: 0,
+        [this.props.tabBarPosition === "overlayTop" ? "top" : "bottom"]: 0,
+        backgroundColor: "rgba(255, 255, 255, 0.7)",
+      };
+    }
+
+    return (
+      <View style={[styles.container, this.props.style]} onLayout={this._handleLayout}>
+        {(this.props.tabBarPosition === "top" || this.props.tabBarPosition==="overlayTop")&& this.renderTabBar(tabBarProps)}
+        {this.renderScrollableContent()}
+        {(this.props.tabBarPosition === "bottom" || this.props.tabBarPosition==="overlayBottom") && this.renderTabBar(tabBarProps)}
+      </View>
+    );
+  },
+});
+>>>>>>> ed4cc170b4b458b207825eadc9b8afa744b87130
 
 export default ReactMixin.onClass(ScrollableTabView, TimerMixin);
 
